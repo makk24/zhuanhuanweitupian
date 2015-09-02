@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMCS.Server", "OMCS.Server\OMCS.Server.csproj", "{23464F78-F716-4297-9D16-F4613A2305C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMCS.Demos.WhiteBoardTest", "OMCS.Demos.WhiteBoardTest\OMCS.Demos.WhiteBoardTest.csproj", "{7F71B0D3-4D20-4C14-B229-C9B7D9E05FD3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23464F78-F716-4297-9D16-F4613A2305C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23464F78-F716-4297-9D16-F4613A2305C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23464F78-F716-4297-9D16-F4613A2305C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23464F78-F716-4297-9D16-F4613A2305C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F71B0D3-4D20-4C14-B229-C9B7D9E05FD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F71B0D3-4D20-4C14-B229-C9B7D9E05FD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F71B0D3-4D20-4C14-B229-C9B7D9E05FD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F71B0D3-4D20-4C14-B229-C9B7D9E05FD3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
