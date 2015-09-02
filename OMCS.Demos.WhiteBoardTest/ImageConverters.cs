@@ -18,6 +18,7 @@ namespace OMCS.Demos.WhiteBoardTest
      */
 
     #region 图片转换器工厂 -> 将被注入到OMCS的多媒体管理器IMultimediaManager的ImageConverterFactory属性
+
     /// <summary>
     /// 图片转换器工厂。
     /// </summary>
@@ -45,12 +46,15 @@ namespace OMCS.Demos.WhiteBoardTest
 
         public bool Support(string extendName)
         {
-            return extendName == ".doc" || extendName == ".docx" || extendName == ".pdf" || extendName == ".ppt" || extendName == ".pptx";
+            return extendName == ".doc" || extendName == ".docx" || extendName == ".pdf" || extendName == ".ppt" ||
+                   extendName == ".pptx";
         }
-    } 
+    }
+
     #endregion
 
     #region 将word文档转换为图片
+
     public class Word2ImageConverter : IImageConverter
     {
         private bool cancelled = false;
@@ -83,7 +87,8 @@ namespace OMCS.Demos.WhiteBoardTest
         /// <param name="endPageNum">从PDF文档的第几页开始停止转换，如果为0，默认值为Word总页数</param>
         /// <param name="imageFormat">设置所需图片格式，如果为null，默认格式为PNG</param>
         /// <param name="resolution">设置图片的像素，数字越大越清晰，如果为0，默认值为128，建议最大值不要超过1024</param>
-        private void ConvertToImage(string wordInputPath, string imageOutputDirPath, int startPageNum, int endPageNum, ImageFormat imageFormat, int resolution)
+        private void ConvertToImage(string wordInputPath, string imageOutputDirPath, int startPageNum, int endPageNum,
+            ImageFormat imageFormat, int resolution)
         {
             try
             {
@@ -102,7 +107,7 @@ namespace OMCS.Demos.WhiteBoardTest
                 if (!Directory.Exists(imageOutputDirPath))
                 {
                     Directory.CreateDirectory(imageOutputDirPath);
-                }               
+                }
 
                 if (startPageNum <= 0)
                 {
@@ -116,7 +121,9 @@ namespace OMCS.Demos.WhiteBoardTest
 
                 if (startPageNum > endPageNum)
                 {
-                    int tempPageNum = startPageNum; startPageNum = endPageNum; endPageNum = startPageNum;
+                    int tempPageNum = startPageNum;
+                    startPageNum = endPageNum;
+                    endPageNum = startPageNum;
                 }
 
                 if (imageFormat == null)
@@ -130,7 +137,8 @@ namespace OMCS.Demos.WhiteBoardTest
                 }
 
                 string imageName = Path.GetFileNameWithoutExtension(wordInputPath);
-                Aspose.Words.Saving.ImageSaveOptions imageSaveOptions = new Aspose.Words.Saving.ImageSaveOptions(Aspose.Words.SaveFormat.Png);
+                Aspose.Words.Saving.ImageSaveOptions imageSaveOptions =
+                    new Aspose.Words.Saving.ImageSaveOptions(Aspose.Words.SaveFormat.Png);
                 imageSaveOptions.Resolution = resolution;
                 for (int i = startPageNum; i <= endPageNum; i++)
                 {
@@ -141,7 +149,8 @@ namespace OMCS.Demos.WhiteBoardTest
 
                     MemoryStream stream = new MemoryStream();
                     imageSaveOptions.PageIndex = i - 1;
-                    string imgPath = Path.Combine(imageOutputDirPath, imageName) + "_" + i.ToString("000") + "." + imageFormat.ToString();
+                    string imgPath = Path.Combine(imageOutputDirPath, imageName) + "_" + i.ToString("000") + "." +
+                                     imageFormat.ToString();
                     doc.Save(stream, imageSaveOptions);
                     Image img = Image.FromStream(stream);
                     Bitmap bm = ESBasic.Helpers.ImageHelper.Zoom(img, 0.6f);
@@ -175,10 +184,12 @@ namespace OMCS.Demos.WhiteBoardTest
                 }
             }
         }
-    } 
+    }
+
     #endregion
 
     #region 将pdf文档转换为图片
+
     public class Pdf2ImageConverter : IImageConverter
     {
         private bool cancelled = false;
@@ -210,7 +221,8 @@ namespace OMCS.Demos.WhiteBoardTest
         /// <param name="startPageNum">从PDF文档的第几页开始转换，如果为0，默认值为1</param>
         /// <param name="endPageNum">从PDF文档的第几页开始停止转换，如果为0，默认值为pdf总页数</param>       
         /// <param name="resolution">设置图片的像素，数字越大越清晰，如果为0，默认值为128，建议最大值不要超过1024</param>
-        private void ConvertToImage(string originFilePath, string imageOutputDirPath, int startPageNum, int endPageNum, int resolution)
+        private void ConvertToImage(string originFilePath, string imageOutputDirPath, int startPageNum, int endPageNum,
+            int resolution)
         {
             try
             {
@@ -243,7 +255,9 @@ namespace OMCS.Demos.WhiteBoardTest
 
                 if (startPageNum > endPageNum)
                 {
-                    int tempPageNum = startPageNum; startPageNum = endPageNum; endPageNum = startPageNum;
+                    int tempPageNum = startPageNum;
+                    startPageNum = endPageNum;
+                    endPageNum = startPageNum;
                 }
 
                 if (resolution <= 0)
@@ -259,8 +273,9 @@ namespace OMCS.Demos.WhiteBoardTest
                         break;
                     }
 
-                    MemoryStream stream = new MemoryStream();                   
-                    string imgPath = Path.Combine(imageOutputDirPath, imageNamePrefix) + "_" + i.ToString("000") + ".jpg";
+                    MemoryStream stream = new MemoryStream();
+                    string imgPath = Path.Combine(imageOutputDirPath, imageNamePrefix) + "_" + i.ToString("000") +
+                                     ".jpg";
                     Aspose.Pdf.Devices.Resolution reso = new Aspose.Pdf.Devices.Resolution(resolution);
                     Aspose.Pdf.Devices.JpegDevice jpegDevice = new Aspose.Pdf.Devices.JpegDevice(reso, 100);
                     jpegDevice.Process(doc.Pages[i], stream);
@@ -297,13 +312,15 @@ namespace OMCS.Demos.WhiteBoardTest
                 }
             }
         }
-    } 
+    }
+
     #endregion
 
     #region 将ppt文档转换为图片
+
     public class Ppt2ImageConverter : IImageConverter
     {
-        private Pdf2ImageConverter pdf2ImageConverter;     
+        private Pdf2ImageConverter pdf2ImageConverter;
         public event CbGeneric<int, int> ProgressChanged;
         public event CbGeneric ConvertSucceed;
         public event CbGeneric<string> ConvertFailed;
@@ -329,7 +346,8 @@ namespace OMCS.Demos.WhiteBoardTest
         /// <param name="startPageNum">从PDF文档的第几页开始转换，如果为0，默认值为1</param>
         /// <param name="endPageNum">从PDF文档的第几页开始停止转换，如果为0，默认值为pdf总页数</param>       
         /// <param name="resolution">设置图片的像素，数字越大越清晰，如果为0，默认值为128，建议最大值不要超过1024</param>
-        private void ConvertToImage(string originFilePath, string imageOutputDirPath, int startPageNum, int endPageNum, int resolution)
+        private void ConvertToImage(string originFilePath, string imageOutputDirPath, int startPageNum, int endPageNum,
+            int resolution)
         {
             try
             {
@@ -362,7 +380,9 @@ namespace OMCS.Demos.WhiteBoardTest
 
                 if (startPageNum > endPageNum)
                 {
-                    int tempPageNum = startPageNum; startPageNum = endPageNum; endPageNum = startPageNum;
+                    int tempPageNum = startPageNum;
+                    startPageNum = endPageNum;
+                    endPageNum = startPageNum;
                 }
 
                 if (resolution <= 0)
@@ -372,7 +392,7 @@ namespace OMCS.Demos.WhiteBoardTest
 
                 //先将ppt转换为pdf临时文件
                 string tmpPdfPath = originFilePath + ".pdf";
-                doc.Save(tmpPdfPath ,Aspose.Slides.Export.SaveFormat.Pdf);
+                doc.Save(tmpPdfPath, Aspose.Slides.Export.SaveFormat.Pdf);
 
                 //再将pdf转换为图片
                 Pdf2ImageConverter converter = new Pdf2ImageConverter();
@@ -400,7 +420,7 @@ namespace OMCS.Demos.WhiteBoardTest
             this.pdf2ImageConverter = null;
         }
 
-        void converter_ProgressChanged(int done, int total)
+        private void converter_ProgressChanged(int done, int total)
         {
             if (this.ProgressChanged != null)
             {
@@ -408,7 +428,7 @@ namespace OMCS.Demos.WhiteBoardTest
             }
         }
 
-        void converter_ConvertSucceed()
+        private void converter_ConvertSucceed()
         {
             if (this.ConvertSucceed != null)
             {
@@ -416,7 +436,7 @@ namespace OMCS.Demos.WhiteBoardTest
             }
         }
 
-        void converter_ConvertFailed(string msg)
+        private void converter_ConvertFailed(string msg)
         {
             if (this.ConvertFailed != null)
             {
@@ -424,5 +444,6 @@ namespace OMCS.Demos.WhiteBoardTest
             }
         }
     }
+
     #endregion
 }
